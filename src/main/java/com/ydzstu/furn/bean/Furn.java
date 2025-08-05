@@ -1,5 +1,7 @@
 package com.ydzstu.furn.bean;
 
+import org.springframework.util.StringUtils;
+
 import java.math.BigDecimal;
 
 public class Furn {
@@ -13,7 +15,9 @@ public class Furn {
         this.price = price;
         this.sales = sales;
         this.stock = stock;
-        this.imgPath = imgPath;
+        if (StringUtils.hasText(imgPath)) {
+            this.imgPath = imgPath;
+        }
     }
 
     private Integer id;
@@ -28,7 +32,7 @@ public class Furn {
 
     private Integer stock;
 
-    private String imgPath;
+    private String imgPath = "assets/images/product-image/2.jpg";
 
     public Integer getId() {
         return id;

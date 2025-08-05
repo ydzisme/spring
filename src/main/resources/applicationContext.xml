@@ -10,7 +10,7 @@
                                 expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
     <!--引入jdbc数据源-->
-    <context:property-placeholder location="jdbc.properties"/>
+    <context:property-placeholder location="classpath:jdbc.properties"/>
     <!--配置数据源-Druid数据源-->
     <bean class="com.alibaba.druid.pool.DruidDataSource" id="pooledDateSource">
         <property name="username" value="${jdbc.userName}"/>
