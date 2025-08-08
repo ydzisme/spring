@@ -9,4 +9,13 @@
     <typeAliases>
         <package name="com.ydzstu.furn.bean"/>
     </typeAliases>
+    <!--后端分页配置-->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!--配置分页合理化
+                    边缘页面处理
+            -->
+            <property name="reasonable" value="true"/>
+        </plugin>
+    </plugins>
 </configuration>

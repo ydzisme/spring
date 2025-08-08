@@ -13,4 +13,6 @@ public interface FurnService {
     public void updateFurn(Furn furn);
     //删除家具信息
     public void delFurn(Integer id);
+    // 通过名字模糊查询家具信息
+    public List<Furn> findFurnByName(String name);
 }

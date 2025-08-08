@@ -36,4 +36,12 @@ public class TestFurnService {
         Integer id = 5;
         furnService.delFurn(id);
     }
+    @Test
+    public void TestFindFurnByName(){
+        String name = "12";
+        List<Furn> furnByName = furnService.findFurnByName(name);
+        for(Furn furn : furnByName){
+            System.out.println(furn);
+        }
+    }
 }

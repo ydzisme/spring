@@ -8,7 +8,7 @@
         </div>
         <div>
           <el-input v-model="search" style="width: 30%;" placeholder="请输入关键字"/>
-          <el-button style="margin-left: 10px" type="primary">搜索</el-button>
+          <el-button style="margin-left: 10px" type="primary" @click="getFurnByName(search)">搜索</el-button>
         </div>
         <el-table :data="tableData" stripe style="width: 100%">
           <el-table-column sortable prop="id" label="ID"/>
@@ -26,6 +26,18 @@
             </template>
           </el-table-column>
         </el-table>
+      </div>
+<!--      分页导航栏-->
+      <div class="demo-pagination-block" style="margin: 10px 0">
+        <el-pagination
+          @size-change="handlePageSizeChange"
+          @current-change="myHandleCurrentChange"
+          :current-page = "currentPage"
+          :page-sizes="[5,10,15]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
+        </el-pagination>
       </div>
     </el-main>
   </el-container>
@@ -90,6 +102,9 @@ export default {
   components: {},
   data() {
     return {
+      currentPage:1,//当前页面
+      pageSize:5,//每页的容量
+      total:10,//全部的信息数量
       search: '',
       dialogVisible: false,
       dialogVisible1: false,
@@ -139,22 +154,58 @@ export default {
     },
     // 查询全部信息
     findAll() {
-      request.get(("api/ssm/findAll")).then(res => {
+      // request.get(("api/ssm/findAll")).then(res => {
+      //   console.log("res",res)
+      //   this.tableData = res.extend.furns
+      // })
+      request.get("api/ssm/findAllByPage",{
+        params:{
+          pageNum:this.currentPage,
+          pageSize:this.pageSize
+        }
+      }).then(res=>{
         console.log("res",res)
-        this.tableData = res.extend.furns
+        this.tableData = res.extend.pageInfo.list
+        this.total = res.extend.pageInfo.total
       })
     },
+    // 修改信息
     handleEdit(row){
       this.form = JSON.parse(JSON.stringify(row));
 
       this.dialogVisible1 = true
     },
+    // 删除信息
     handleDelete(id){
       const requestData = { id: Number(id) };
       request.post("api/ssm/delete",requestData).then(res => {
         console.log("res",res)
       })
       this.findAll()
+    },
+    // 跳转页面
+    myHandleCurrentChange(pageNum){
+      this.currentPage = pageNum
+      this.findAll()
+    },
+    // 修改页面容量
+    handlePageSizeChange(pageSize){
+      this.pageSize = pageSize
+      this.findAll()
+    },
+    //搜索数据显示
+    getFurnByName(search){
+      request.get("api/ssm/findFurnsByName",{
+        params: {
+          name:search,
+          pageNum:this.currentPage,
+          pageSize:this.pageSize,
+        }
+      }).then(res=>{
+        console.log("res",res)
+        this.total = res.extend.pageInfo.total
+        this.tableData = res.extend.pageInfo.list
+      })
     }
   }
 }
